@@ -1,5 +1,8 @@
-import BudgetManagement from "@/components/budget/budget-management";
+import { getBudgetsWithSpent } from "@/app/actions/get-budgets-with-spent";
+import BudgetManagement from "@/components/budgets/budget-management";
 
-export default function Page() {
-  return <BudgetManagement />;
+export default async function Page() {
+  const budgets = await getBudgetsWithSpent();
+
+  return <BudgetManagement budgetsData={budgets} />;
 }

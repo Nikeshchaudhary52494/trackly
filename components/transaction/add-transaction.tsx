@@ -19,38 +19,39 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { CreateExpenseInput, expenseSchema } from "@/lib/validationSchemas";
+import { createExpense } from "@/app/actions/create-expense";
 
-const formSchema = z.object({
-  amount: z.coerce.number().min(0.01, "Amount must be at least $0.01"),
-  date: z.string().min(1, "Date is required"),
-  description: z.string().min(1, "Description is required"),
-  category: z.string().min(1, "Please select a category"),
-});
+interface AddTransactionFormParams {
+  categoriesList: {
+    name: string;
+    id: string;
+  }[];
+}
 
-type FormValues = z.infer<typeof formSchema>;
-
-export default function AddTransactionForm() {
+export default function AddTransactionForm({
+  categoriesList,
+}: AddTransactionFormParams) {
   const router = useRouter();
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CreateExpenseInput>({
+    resolver: zodResolver(expenseSchema),
     defaultValues: {
       amount: 0,
       date: "",
       description: "",
-      category: "",
+      categoryId: "",
     },
   });
 
-  function onSubmit(data: FormValues) {
+  const onSubmit = async (data: CreateExpenseInput) => {
     console.log("Transaction submitted:", data);
-    // You can POST this to your backend here
-    router.push("#transactions");
-  }
+    await createExpense(data);
+    router.push("/transactions");
+  };
 
   return (
     <div id="add-transaction" className="max-w-2xl mx-auto">
@@ -118,12 +119,13 @@ export default function AddTransactionForm() {
 
               <FormField
                 control={form.control}
-                name="category"
+                name="categoryId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Category</FormLabel>
                     <FormControl>
                       <Select
+                        value={field.value}
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
@@ -131,16 +133,11 @@ export default function AddTransactionForm() {
                           <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="food">Food & Dining</SelectItem>
-                          <SelectItem value="transport">
-                            Transportation
-                          </SelectItem>
-                          <SelectItem value="utilities">Utilities</SelectItem>
-                          <SelectItem value="entertainment">
-                            Entertainment
-                          </SelectItem>
-                          <SelectItem value="shopping">Shopping</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                          {categoriesList.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -148,7 +145,6 @@ export default function AddTransactionForm() {
                   </FormItem>
                 )}
               />
-
               <div className="flex justify-end gap-2 pt-4">
                 <Link href="/transactions">
                   <Button type="button" variant="outline">

@@ -9,8 +9,20 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { db } from "@/lib/db";
+import { getOrCreateTestUser } from "@/lib/getTestUser";
+import { format } from "date-fns";
 
-export default function RecentTransactions() {
+export default async function RecentTransactions() {
+  const user = await getOrCreateTestUser();
+
+  const recentTransactions = await db.expense.findMany({
+    where: { userId: user.id },
+    include: { category: true },
+    orderBy: { date: "desc" },
+    take: 5,
+  });
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -18,12 +30,13 @@ export default function RecentTransactions() {
           Recent Transactions
         </CardTitle>
         <Link
-          href="transactions"
+          href="/transactions"
           className="text-sm font-medium text-primary hover:underline"
         >
           View All
         </Link>
       </CardHeader>
+
       <CardContent className="overflow-x-auto p-0">
         <Table>
           <TableHeader>
@@ -35,45 +48,34 @@ export default function RecentTransactions() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>Jun 15, 2023</TableCell>
-              <TableCell>Grocery Store</TableCell>
-              <TableCell>
-                <Badge
-                  variant="outline"
-                  className="text-green-700 border-green-300"
+            {recentTransactions.length > 0 ? (
+              recentTransactions.map((txn) => (
+                <TableRow key={txn.id}>
+                  <TableCell>{format(new Date(txn.date), "PP")}</TableCell>
+                  <TableCell>{txn.description}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      className={`text-${txn.category.color}-700 border-${txn.category.color}-300`}
+                    >
+                      {txn.category.name}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    ${txn.amount.toFixed(2)}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={4}
+                  className="text-center text-muted-foreground"
                 >
-                  Food
-                </Badge>
-              </TableCell>
-              <TableCell className="text-right">$125.50</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Jun 14, 2023</TableCell>
-              <TableCell>Electric Bill</TableCell>
-              <TableCell>
-                <Badge
-                  variant="outline"
-                  className="text-blue-700 border-blue-300"
-                >
-                  Utilities
-                </Badge>
-              </TableCell>
-              <TableCell className="text-right">$85.20</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Jun 12, 2023</TableCell>
-              <TableCell>Restaurant</TableCell>
-              <TableCell>
-                <Badge
-                  variant="outline"
-                  className="text-green-700 border-green-300"
-                >
-                  Food
-                </Badge>
-              </TableCell>
-              <TableCell className="text-right">$45.75</TableCell>
-            </TableRow>
+                  No transactions found.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>

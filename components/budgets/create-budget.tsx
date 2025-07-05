@@ -19,20 +19,22 @@ import {
 } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { budgetSchema, CreateBudgetInput } from "@/lib/validationSchemas";
+import { createBudget } from "@/app/actions/create-budget";
 
-const budgetSchema = z.object({
-  category: z.string().min(1, "Select a category"),
-  amount: z.coerce.number().min(0.01, "Amount must be at least $0.01"),
-});
+interface CreateBudgetProps {
+  categories: {
+    name: string;
+    id: string;
+    color: string;
+  }[];
+}
 
-type BudgetFormValues = z.infer<typeof budgetSchema>;
-
-export default function CreateBudget() {
-  const form = useForm<BudgetFormValues>({
+export default function CreateBudget({ categories }: CreateBudgetProps) {
+  const form = useForm<CreateBudgetInput>({
     resolver: zodResolver(budgetSchema),
     defaultValues: {
       category: "",
@@ -40,8 +42,8 @@ export default function CreateBudget() {
     },
   });
 
-  const onSubmit = (data: BudgetFormValues) => {
-    console.log("New Budget:", data);
+  const onSubmit = async (data: CreateBudgetInput) => {
+    await createBudget(data);
     form.reset();
   };
 
@@ -68,11 +70,11 @@ export default function CreateBudget() {
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="entertainment">
-                          Entertainment
-                        </SelectItem>
-                        <SelectItem value="shopping">Shopping</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>

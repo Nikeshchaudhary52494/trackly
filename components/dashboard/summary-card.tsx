@@ -10,9 +10,7 @@ export default function SummaryCard({
   color: string;
 }) {
   return (
-    <div
-      className={`bg-white p-6 rounded-lg shadow-sm border-l-4 border-${color}-500`}
-    >
+    <div className={`bg-white p-6 rounded-lg shadow-sm border-l-4 ${color}`}>
       <h3 className="text-gray-500 text-sm font-medium">{title}</h3>
       <p className="text-2xl font-bold mt-2">{value}</p>
       <p className="text-sm text-gray-500 mt-1">{note}</p>

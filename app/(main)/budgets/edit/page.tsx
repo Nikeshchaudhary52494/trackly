@@ -1,4 +1,4 @@
-import EditBudgetForm from "@/components/budget/edit-budget";
+import EditBudgetForm from "@/components/budgets/edit-budget";
 
 export default function Page() {
   return <EditBudgetForm />;

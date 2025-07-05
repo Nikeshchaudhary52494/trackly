@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -21,26 +20,18 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { CategoryFormValues } from "@/lib/types";
 import Link from "next/link";
+import { categorySchema, CreateCategoryInput } from "@/lib/validationSchemas";
+import createCategory from "@/app/actions/create-category";
 
-const schema = z.object({
-  name: z.string().min(1, "Category name is required"),
-  color: z.string().min(1, "Color is required"),
-});
-
-type Props = {
-  onAdd: (category: CategoryFormValues) => void;
-};
-
-export default function AddCategoryForm({ onAdd }: Props) {
-  const form = useForm<CategoryFormValues>({
-    resolver: zodResolver(schema),
+export default function AddCategoryForm() {
+  const form = useForm<CreateCategoryInput>({
+    resolver: zodResolver(categorySchema),
     defaultValues: { name: "", color: "" },
   });
 
-  const onSubmit = (data: CategoryFormValues) => {
-    onAdd(data);
+  const onSubmit = async (data: CreateCategoryInput) => {
+    await createCategory(data);
     form.reset();
   };
 

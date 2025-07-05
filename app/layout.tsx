@@ -5,6 +5,8 @@ import Footer from "@/components/footer";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import Header from "@/components/header";
+import { getOrCreateTestUser } from "@/lib/getTestUser";
+import { seedTestCategories } from "@/lib/seedTestCategories";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,11 +23,13 @@ export const metadata: Metadata = {
   description: "a expence tracker application",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await getOrCreateTestUser();
+  await seedTestCategories();
   return (
     <html lang="en">
       <body

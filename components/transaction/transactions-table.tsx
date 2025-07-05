@@ -12,54 +12,24 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
-type Transaction = {
-  id: number;
-  date: string;
-  description: string;
-  category: string;
-  amount: number;
-};
+interface TransactionTableProps {
+  transactionsData: {
+    id: string;
+    amount: number;
+    date: string;
+    description: string;
+    categoryId: string;
+    category: {
+      name: string;
+      id: string;
+      color: string;
+    };
+  }[];
+}
 
-const transactions: Transaction[] = [
-  {
-    id: 1,
-    date: "Jun 15, 2023",
-    description: "Grocery Store",
-    category: "Food",
-    amount: 125.5,
-  },
-  {
-    id: 2,
-    date: "Jun 14, 2023",
-    description: "Electric Bill",
-    category: "Utilities",
-    amount: 85.2,
-  },
-  {
-    id: 3,
-    date: "Jun 12, 2023",
-    description: "Restaurant",
-    category: "Food",
-    amount: 45.75,
-  },
-  {
-    id: 4,
-    date: "Jun 10, 2023",
-    description: "Gas Station",
-    category: "Transport",
-    amount: 35.4,
-  },
-];
-
-const categoryColors: Record<string, string> = {
-  Food: "bg-green-100 text-green-800",
-  Utilities: "bg-blue-100 text-blue-800",
-  Transport: "bg-yellow-100 text-yellow-800",
-  Shopping: "bg-purple-100 text-purple-800",
-  Other: "bg-gray-100 text-gray-800",
-};
-
-export default function TransactionTable() {
+export default function TransactionTable({
+  transactionsData,
+}: TransactionTableProps) {
   return (
     <div id="transactions" className="tab-content">
       <div className="flex justify-between items-center mb-6">
@@ -91,7 +61,7 @@ export default function TransactionTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {transactions.map((tx) => (
+              {transactionsData.map((tx) => (
                 <TableRow key={tx.id}>
                   <TableCell className="text-muted-foreground">
                     {tx.date}
@@ -101,12 +71,9 @@ export default function TransactionTable() {
                   </TableCell>
                   <TableCell>
                     <span
-                      className={`px-2 py-1 inline-flex text-xs font-semibold rounded-full ${
-                        categoryColors[tx.category] ||
-                        "bg-gray-100 text-gray-800"
-                      }`}
+                      className={`px-2 py-1 inline-flex text-xs font-semibold rounded-full bg-${tx.category.color}-400`}
                     >
-                      {tx.category}
+                      {tx.category.name}
                     </span>
                   </TableCell>
                   <TableCell className="text-muted-foreground">

@@ -1,10 +1,47 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { data } from "@/lib/data";
+import { ColorKey, COLORS } from "@/lib/data";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-export default function CategoryChart() {
+interface Expense {
+  id: string;
+  date: string;
+  amount: number;
+  description: string;
+  category: {
+    id: string;
+    name: string;
+    color: string;
+  };
+}
+
+interface CategoryChartProps {
+  data: Expense[];
+}
+
+export default function CategoryChart({ data }: CategoryChartProps) {
+  // Group by category and calculate total per category
+  const totalsMap = new Map<
+    string,
+    { name: string; value: number; color: string }
+  >();
+
+  data.forEach((expense) => {
+    const category = expense.category;
+    if (!totalsMap.has(category.id)) {
+      totalsMap.set(category.id, {
+        name: category.name,
+        value: expense.amount,
+        color: category.color,
+      });
+    } else {
+      totalsMap.get(category.id)!.value += expense.amount;
+    }
+  });
+
+  const chartData = Array.from(totalsMap.values());
+
   return (
     <Card>
       <CardHeader>
@@ -15,7 +52,7 @@ export default function CategoryChart() {
           <ResponsiveContainer>
             <PieChart>
               <Pie
-                data={data}
+                data={chartData}
                 dataKey="value"
                 nameKey="name"
                 cx="50%"
@@ -23,24 +60,25 @@ export default function CategoryChart() {
                 outerRadius={80}
                 label
               >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                {chartData.map((entry, index) => (
+                  <Cell key={index} fill={COLORS[entry.color as ColorKey]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
         <div className="grid grid-cols-2 gap-3 mt-6 w-full">
-          {data.map((item, index) => (
+          {chartData.map((item, index) => (
             <div key={index} className="flex items-center">
               <div
                 className="w-3 h-3 rounded-full mr-2"
-                style={{ backgroundColor: item.color }}
-              ></div>
+                //@ts-ignore
+                style={{ backgroundColor: COLORS[item.color] }}
+              />
               <span className="text-sm text-muted-foreground">
-                {item.name} ({item.value}%)
+                {item.name} (${item.value.toFixed(2)})
               </span>
             </div>
           ))}

@@ -16,17 +16,7 @@ type CategoryData = {
   actual: number;
 };
 
-const COLORS = [
-  "#34d399",
-  "#fbbf24",
-  "#60a5fa",
-  "#f472b6",
-  "#f87171",
-  "#a78bfa",
-];
-
 export default function CategoryAnalysis({ data }: { data: CategoryData[] }) {
-  const total = data.reduce((acc, item) => acc + item.actual, 0);
   const mostExpensive = data.reduce(
     (prev, curr) => (curr.actual > prev.actual ? curr : prev),
     data[0]
@@ -54,7 +44,7 @@ export default function CategoryAnalysis({ data }: { data: CategoryData[] }) {
               {data.map((entry, index) => (
                 <Cell
                   key={entry.category}
-                  fill={COLORS[index % COLORS.length]}
+                  fill={COLORS2[index % COLORS2.length]}
                 />
               ))}
             </Pie>
@@ -75,6 +65,7 @@ export default function CategoryAnalysis({ data }: { data: CategoryData[] }) {
 
 import { TrendingUp, AlertTriangle, CheckCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { COLORS2 } from "@/lib/data";
 
 export function CategoryInsights({
   mostExpensive,
