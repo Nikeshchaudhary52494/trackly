@@ -12,8 +12,8 @@ export default function NotFound() {
         Page Not Found
       </h1>
       <p className="text-muted-foreground max-w-md">
-        Looks like you overspent your route budget. The page you’re looking for
-        doesn't exist in Trackly.
+        Looks like you overspent your route budget. The page you are looking for
+        does not exist in Trackly.
       </p>
 
       <Button asChild className="mt-6">

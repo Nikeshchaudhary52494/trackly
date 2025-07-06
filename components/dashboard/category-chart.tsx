@@ -62,7 +62,6 @@ export default function CategoryChart({ data }: CategoryChartProps) {
             <div key={index} className="flex items-center">
               <div
                 className="w-3 h-3 rounded-full mr-2"
-                //@ts-ignore
                 style={{ backgroundColor: COLORS[item.color] }}
               />
               <span className="text-sm text-muted-foreground">

@@ -16,18 +16,15 @@ export function BudgetStatusList({ data }: { data: BudgetData[] }) {
 
         let status = "On Budget";
         let icon = <CheckCircle className="text-green-600 w-4 h-4" />;
-        let badgeVariant: "default" | "destructive" | "outline" = "default";
         let badgeColor = "bg-green-100 text-green-800";
 
         if (diff > 0) {
           status = "Over Budget";
           icon = <AlertTriangle className="text-red-600 w-4 h-4" />;
-          badgeVariant = "destructive";
           badgeColor = "bg-red-100 text-red-800";
         } else if (diff < 0) {
           status = "Under Budget";
           icon = <Circle className="text-yellow-500 w-4 h-4" />;
-          badgeVariant = "outline";
           badgeColor = "bg-yellow-100 text-yellow-800";
         }
 
