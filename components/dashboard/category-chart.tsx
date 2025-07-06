@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ColorKey, COLORS } from "@/lib/data";
+import { COLORS } from "@/lib/data";
 import { Expense } from "@/lib/types";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -49,7 +49,7 @@ export default function CategoryChart({ data }: CategoryChartProps) {
                 label
               >
                 {chartData.map((entry, index) => (
-                  <Cell key={index} fill={COLORS[entry.color as ColorKey]} />
+                  <Cell key={index} fill={COLORS[entry.color]} />
                 ))}
               </Pie>
               <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />

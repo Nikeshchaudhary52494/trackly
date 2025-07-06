@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/table";
 import EditTransactionDialog from "./Edit-transaction-dialog";
 import { deleteTransaction } from "@/app/actions/transaction/delete-transaction";
+import clsx from "clsx";
+import { CATEGORY_TAG_COLORS } from "@/lib/data";
 
 interface TransactionTableProps {
   transactionsData: {
@@ -82,7 +84,10 @@ export default function TransactionTable({
                   </TableCell>
                   <TableCell>
                     <span
-                      className={`px-2 py-1 inline-flex text-xs font-semibold rounded-full bg-${tx.category.color}-400`}
+                      className={clsx(
+                        "px-2 py-1 inline-flex text-xs font-semibold rounded-full",
+                        CATEGORY_TAG_COLORS[tx.category.color] || "bg-gray-300"
+                      )}
                     >
                       {tx.category.name}
                     </span>

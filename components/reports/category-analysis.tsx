@@ -78,7 +78,6 @@ export function CategoryInsights({
 }) {
   return (
     <div className="mt-6 space-y-3 text-sm">
-      {/* Most Expensive */}
       <div className="flex items-center gap-2 text-muted-foreground">
         <TrendingUp className="w-4 h-4 text-purple-600" />
         <span>
@@ -87,7 +86,6 @@ export function CategoryInsights({
         </span>
       </div>
 
-      {/* Over Budget */}
       <div className="flex items-start gap-2 text-red-600">
         <AlertTriangle className="w-4 h-4 mt-0.5" />
         <span>
@@ -106,7 +104,6 @@ export function CategoryInsights({
         </span>
       </div>
 
-      {/* On Budget */}
       <div className="flex items-start gap-2 text-green-600">
         <CheckCircle className="w-4 h-4 mt-0.5" />
         <span>

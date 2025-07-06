@@ -54,7 +54,7 @@ export default async function Page() {
       title: "Total Expenses",
       value: formatCurrency(totalExpenses),
       note: "This month",
-      color: "bg-blue-500",
+      color: "blue-500",
     },
     {
       title: "Budget Status",
@@ -63,13 +63,13 @@ export default async function Page() {
           ? `${formatCurrency(budgetRemaining)} remaining`
           : `${formatCurrency(Math.abs(budgetRemaining))} over`,
       note: `${Math.round(budgetUsedPercent)}% of budget used`,
-      color: budgetRemaining >= 0 ? "bg-green-500" : "bg-red-500",
+      color: budgetRemaining >= 0 ? "green-500" : "red-500",
     },
     {
       title: "Top Category",
       value: topCategory?.name || "N/A",
       note: topCategory ? `${formatCurrency(topCategory.total)} spent` : "",
-      color: "bg-purple-500",
+      color: "purple-500",
     },
   ];
 

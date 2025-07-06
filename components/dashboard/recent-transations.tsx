@@ -12,6 +12,8 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { getOrCreateTestUser } from "@/lib/getTestUser";
 import { format } from "date-fns";
+import clsx from "clsx";
+import { CATEGORY_TAG_COLORS } from "@/lib/data";
 
 export default async function RecentTransactions() {
   const user = await getOrCreateTestUser();
@@ -56,7 +58,10 @@ export default async function RecentTransactions() {
                   <TableCell>
                     <Badge
                       variant="outline"
-                      className={`text-${txn.category.color}-700 border-${txn.category.color}-300`}
+                      className={clsx(
+                        "",
+                        CATEGORY_TAG_COLORS[txn.category.color] || "bg-gray-300"
+                      )}
                     >
                       {txn.category.name}
                     </Badge>

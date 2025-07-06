@@ -7,9 +7,7 @@ import {
   Tag,
 } from "lucide-react";
 
-export type ColorKey = "indigo" | "red" | "purple" | "yellow" | "green";
-
-export const COLORS: Record<ColorKey, string> = {
+export const COLORS: Record<string, string> = {
   indigo: "#6366f1",
   red: "#ef4444",
   purple: "#a855f7",
@@ -26,21 +24,13 @@ export const COLORS2 = [
   "#a78bfa",
 ];
 
-export const categoryColors: Record<string, string> = {
-  Food: "bg-green-100 text-green-800",
-  Utilities: "bg-blue-100 text-blue-800",
-  Transport: "bg-yellow-100 text-yellow-800",
-  Shopping: "bg-purple-100 text-purple-800",
-  Other: "bg-gray-100 text-gray-800",
-};
-
-export const COLOR_CLASSES: Record<string, string> = {
-  blue: "border-blue-500",
-  green: "border-green-500",
-  red: "border-red-500",
-  purple: "border-purple-500",
-  yellow: "border-yellow-500",
-  indigo: "border-indigo-500",
+export const CATEGORY_TAG_COLORS: Record<string, string> = {
+  blue: "bg-blue-100 text-blue-800 border border-blue-300",
+  green: "bg-green-100 text-green-800 border border-green-300",
+  red: "bg-red-100 text-red-800 border border-red-300",
+  purple: "bg-purple-100 text-purple-800 border border-purple-300",
+  yellow: "bg-yellow-100 text-yellow-800 border border-yellow-300",
+  indigo: "bg-indigo-100 text-indigo-800 border border-indigo-300",
 };
 
 export const navOptions = {
