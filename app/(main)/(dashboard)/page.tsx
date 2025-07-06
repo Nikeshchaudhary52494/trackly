@@ -4,8 +4,7 @@ import RecentTransations from "@/components/dashboard/recent-transations";
 import SummaryCard from "@/components/dashboard/summary-card";
 import { db } from "@/lib/db";
 import { getOrCreateTestUser } from "@/lib/getTestUser";
-import { formatCurrency } from "@/lib/utils"; // helper for formatting numbers
-
+import { formatCurrency } from "@/lib/utils";
 export default async function Page() {
   const user = await getOrCreateTestUser();
 
@@ -54,7 +53,7 @@ export default async function Page() {
       title: "Total Expenses",
       value: formatCurrency(totalExpenses),
       note: "This month",
-      color: "blue-500",
+      color: "border-blue-500",
     },
     {
       title: "Budget Status",
@@ -63,13 +62,13 @@ export default async function Page() {
           ? `${formatCurrency(budgetRemaining)} remaining`
           : `${formatCurrency(Math.abs(budgetRemaining))} over`,
       note: `${Math.round(budgetUsedPercent)}% of budget used`,
-      color: budgetRemaining >= 0 ? "green-500" : "red-500",
+      color: budgetRemaining >= 0 ? "border-green-500" : "border-red-500",
     },
     {
       title: "Top Category",
       value: topCategory?.name || "N/A",
       note: topCategory ? `${formatCurrency(topCategory.total)} spent` : "",
-      color: "purple-500",
+      color: "border-purple-500",
     },
   ];
 

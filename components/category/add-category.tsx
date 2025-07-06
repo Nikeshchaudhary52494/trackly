@@ -23,6 +23,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { categorySchema, CreateCategoryInput } from "@/lib/validationSchemas";
 import createCategory from "@/app/actions/category/create-category";
+import { COLOR_OPTIONS } from "@/lib/data";
 
 export default function AddCategoryForm() {
   const form = useForm<CreateCategoryInput>({
@@ -69,11 +70,11 @@ export default function AddCategoryForm() {
                         <SelectValue placeholder="Select a color" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="indigo">Indigo</SelectItem>
-                        <SelectItem value="green">Green</SelectItem>
-                        <SelectItem value="yellow">Yellow</SelectItem>
-                        <SelectItem value="red">Red</SelectItem>
-                        <SelectItem value="purple">Purple</SelectItem>
+                        {COLOR_OPTIONS.map((color) => (
+                          <SelectItem key={color} value={color}>
+                            {color.charAt(0).toUpperCase() + color.slice(1)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>

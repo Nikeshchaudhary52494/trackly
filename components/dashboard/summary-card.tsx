@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 export default function SummaryCard({
   title,
   value,
@@ -11,7 +13,10 @@ export default function SummaryCard({
 }) {
   return (
     <div
-      className={`bg-white p-6 rounded-lg shadow-sm border-l-4 border-${color}`}
+      className={clsx(
+        "bg-white p-6 rounded-lg shadow-sm border-l-4",
+        `${color}`
+      )}
     >
       <h3 className="text-gray-500 text-sm font-medium">{title}</h3>
       <p className="text-2xl font-bold mt-2">{value}</p>

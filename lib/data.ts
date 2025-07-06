@@ -8,20 +8,42 @@ import {
 } from "lucide-react";
 
 export const COLORS: Record<string, string> = {
-  indigo: "#6366f1",
+  blue: "#3b82f6",
+  green: "#22c55e",
   red: "#ef4444",
   purple: "#a855f7",
   yellow: "#eab308",
-  green: "#22c55e",
+  indigo: "#6366f1",
+  pink: "#ec4899",
+  orange: "#f97316",
+  teal: "#14b8a6",
+  gray: "#6b7280",
 };
 
 export const COLORS2 = [
-  "#34d399",
-  "#fbbf24",
-  "#60a5fa",
-  "#f472b6",
-  "#f87171",
-  "#a78bfa",
+  "#3b82f6", // blue
+  "#22c55e", // green
+  "#ef4444", // red
+  "#a855f7", // purple
+  "#eab308", // yellow
+  "#6366f1", // indigo
+  "#ec4899", // pink
+  "#f97316", // orange
+  "#14b8a6", // teal
+  "#6b7280", // gray
+];
+
+export const COLOR_OPTIONS = [
+  "blue",
+  "green",
+  "red",
+  "purple",
+  "yellow",
+  "indigo",
+  "pink",
+  "orange",
+  "teal",
+  "gray",
 ];
 
 export const CATEGORY_TAG_COLORS: Record<string, string> = {
@@ -31,6 +53,10 @@ export const CATEGORY_TAG_COLORS: Record<string, string> = {
   purple: "bg-purple-100 text-purple-800 border border-purple-300",
   yellow: "bg-yellow-100 text-yellow-800 border border-yellow-300",
   indigo: "bg-indigo-100 text-indigo-800 border border-indigo-300",
+  pink: "bg-pink-100 text-pink-800 border border-pink-300",
+  orange: "bg-orange-100 text-orange-800 border border-orange-300",
+  teal: "bg-teal-100 text-teal-800 border border-teal-300",
+  gray: "bg-gray-100 text-gray-800 border border-gray-300",
 };
 
 export const navOptions = {
