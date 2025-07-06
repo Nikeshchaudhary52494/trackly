@@ -11,6 +11,8 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
+import EditTransactionDialog from "./Edit-transaction-dialog";
+import { deleteTransaction } from "@/app/actions/transaction/delete-transaction";
 
 interface TransactionTableProps {
   transactionsData: {
@@ -25,11 +27,20 @@ interface TransactionTableProps {
       color: string;
     };
   }[];
+  categoriesList: {
+    name: string;
+    id: string;
+  }[];
 }
 
 export default function TransactionTable({
   transactionsData,
+  categoriesList,
 }: TransactionTableProps) {
+  const handleDelete = async (TransactionId: string) => {
+    await deleteTransaction(TransactionId);
+  };
+
   return (
     <div id="transactions" className="tab-content">
       <div className="flex justify-between items-center mb-6">
@@ -80,16 +91,17 @@ export default function TransactionTable({
                     ${tx.amount.toFixed(2)}
                   </TableCell>
                   <TableCell className="space-x-2">
-                    <Link
-                      href="#edit-transaction"
-                      data-tab="edit-transaction"
-                      className="tab-link text-indigo-600 hover:text-indigo-900"
+                    <EditTransactionDialog
+                      categoriesList={categoriesList}
+                      transactionsData={tx}
+                    />
+                    <Button
+                      onClick={() => handleDelete(tx.id)}
+                      variant="ghost"
+                      className="text-red-600 hover:text-red-900"
                     >
-                      Edit
-                    </Link>
-                    <button className="text-red-600 hover:text-red-900">
                       Delete
-                    </button>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

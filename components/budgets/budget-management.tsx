@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import Link from "next/link";
+import EditBudgetDialog from "./edit-budget-dialog";
 
 interface BudgetManagementProps {
   budgetsData: {
@@ -70,13 +70,7 @@ export default function BudgetManagement({
                       ${remaining.toFixed(2)}
                     </TableCell>
                     <TableCell>
-                      <Link
-                        href="#edit-budget"
-                        data-tab="edit-budget"
-                        className="tab-link text-indigo-600 hover:underline"
-                      >
-                        Edit
-                      </Link>
+                      <EditBudgetDialog budgetData={b} />
                     </TableCell>
                   </TableRow>
                 );

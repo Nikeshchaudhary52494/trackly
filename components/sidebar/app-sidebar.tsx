@@ -1,15 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Home,
-  Wallet,
-  Settings,
-  BarChart2,
-  CreditCard,
-  Tag,
-  PieChart,
-} from "lucide-react";
+import { PieChart } from "lucide-react";
 
 import { NavMain } from "@/components/sidebar/nav-main";
 import { NavUser } from "@/components/sidebar/nav-user";
@@ -21,95 +13,7 @@ import {
   SidebarMenuButton,
   SidebarRail,
 } from "@/components/ui/sidebar";
-
-const data = {
-  user: {
-    name: "John Doe",
-    email: "john@example.com",
-    avatar: "/avatars/user.jpg",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/",
-      icon: Home,
-      isActive: true,
-    },
-    {
-      title: "Transactions",
-      url: "/transactions",
-      icon: CreditCard,
-      items: [
-        {
-          title: "All Transactions",
-          url: "/transactions",
-        },
-        {
-          title: "Add Transaction",
-          url: "/transactions/add",
-        },
-        {
-          title: "Edit Transaction",
-          url: "/transactions/edit",
-        },
-      ],
-    },
-    {
-      title: "Budgets",
-      url: "/budgets",
-      icon: Wallet,
-      items: [
-        {
-          title: "View Budgets",
-          url: "/budgets",
-        },
-        {
-          title: "Create Budget",
-          url: "/budgets/create",
-        },
-        {
-          title: "Edit Budget",
-          url: "/budgets/edit",
-        },
-      ],
-    },
-    {
-      title: "Categories",
-      url: "/categories",
-      icon: Tag,
-      items: [
-        {
-          title: "Manage Categories",
-          url: "/categories/manage",
-        },
-        {
-          title: "Add Category",
-          url: "/categories/add",
-        },
-      ],
-    },
-    {
-      title: "Reports",
-      url: "/reports",
-      icon: BarChart2,
-      items: [
-        {
-          title: "Monthly Summary",
-          url: "/reports/monthly",
-        },
-        {
-          title: "Category Analysis",
-          url: "/reports/categories",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "/settings",
-      icon: Settings,
-    },
-  ],
-};
+import { navOptions } from "@/lib/data";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -123,10 +27,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navOptions.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={navOptions.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

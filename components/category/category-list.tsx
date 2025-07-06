@@ -11,47 +11,56 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CategoryFormValues, colorClassMap } from "@/lib/types";
+import { colorClassMap } from "@/lib/types";
 import Link from "next/link";
+import { deleteCategory } from "@/app/actions/category/delete-category";
+import { useRouter } from "next/navigation";
+import { editCategory } from "@/app/actions/category/edit-category";
 
-type Props = {
-  initialCategories: CategoryFormValues[];
+type Category = {
+  name: string;
+  id: string;
+  color: string;
 };
 
-export default function CategoryList({ initialCategories }: Props) {
-  const [categories, setCategories] =
-    useState<CategoryFormValues[]>(initialCategories);
+interface CategoryListProps {
+  initialCategories: {
+    color: string;
+    name: string;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+  }[];
+}
+
+export default function CategoryList({ initialCategories }: CategoryListProps) {
+  const router = useRouter();
+
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<CategoryFormValues>({
+  const [editForm, setEditForm] = useState<Category>({
     name: "",
     color: "",
+    id: "",
   });
 
-  const handleEditChange = (field: keyof CategoryFormValues, value: string) => {
+  const handleEditChange = (field: keyof Category, value: string) => {
     setEditForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleEditClick = (index: number) => {
     setEditIndex(index);
-    setEditForm(categories[index]);
   };
 
-  const handleUpdate = () => {
-    if (editIndex !== null) {
-      const updated = [...categories];
-      updated[editIndex] = editForm;
-      setCategories(updated);
-      setEditIndex(null);
-      setEditForm({ name: "", color: "" });
-    }
+  const handleUpdate = async (categoryId: string) => {
+    await editCategory(categoryId, editForm);
+    setEditIndex(null);
+    setEditForm({ name: "", color: "", id: "" });
   };
 
-  const handleDelete = (index: number) => {
-    setCategories(categories.filter((_, i) => i !== index));
-    if (editIndex === index) {
-      setEditIndex(null);
-      setEditForm({ name: "", color: "" });
-    }
+  const handleDelete = async (categoryId: string) => {
+    await deleteCategory(categoryId);
+    router.refresh();
   };
 
   return (
@@ -73,12 +82,12 @@ export default function CategoryList({ initialCategories }: Props) {
           <CardTitle>All Categories</CardTitle>
         </CardHeader>
         <CardContent>
-          {categories.length === 0 ? (
+          {initialCategories.length === 0 ? (
             <p className="text-muted-foreground text-sm">
               No categories added yet.
             </p>
           ) : (
-            categories.map((cat, index) => (
+            initialCategories.map((cat, index) => (
               <div
                 key={index}
                 className="flex items-center justify-between border rounded-md px-3 py-2 mb-2"
@@ -118,7 +127,7 @@ export default function CategoryList({ initialCategories }: Props) {
                 )}
                 <div className="flex gap-2 ml-auto">
                   {editIndex === index ? (
-                    <Button size="sm" onClick={handleUpdate}>
+                    <Button size="sm" onClick={() => handleUpdate(cat.id)}>
                       Save
                     </Button>
                   ) : (
@@ -133,7 +142,7 @@ export default function CategoryList({ initialCategories }: Props) {
                   <Button
                     size="sm"
                     variant="destructive"
-                    onClick={() => handleDelete(index)}
+                    onClick={() => handleDelete(cat.id)}
                   >
                     Delete
                   </Button>

@@ -12,5 +12,15 @@ export default async function Page() {
       category: true,
     },
   });
-  return <TransactionTable transactionsData={transaction} />;
+  const categories = await db.category.findMany({
+    where: {
+      userId: user.id,
+    },
+  });
+  return (
+    <TransactionTable
+      categoriesList={categories}
+      transactionsData={transaction}
+    />
+  );
 }

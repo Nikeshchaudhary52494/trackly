@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,149 +19,150 @@ import {
 } from "@/components/ui/form";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { CreateExpenseInput, expenseSchema } from "@/lib/validationSchemas";
+import { SetStateAction } from "react";
+import { editTransaction } from "@/app/actions/transaction/edit-transaction";
 
-const formSchema = z.object({
-  amount: z.coerce.number().min(0.01, "Amount must be at least $0.01"),
-  date: z.string().min(1, "Date is required"),
-  description: z.string().min(1, "Description is required"),
-  category: z.string().min(1, "Category is required"),
-});
+interface EditTransactionFormProps {
+  onSuccess: (value: SetStateAction<boolean>) => void;
+  transactionsData: {
+    id: string;
+    amount: number;
+    date: string;
+    description: string;
+    categoryId: string;
+    category: {
+      name: string;
+      id: string;
+      color: string;
+    };
+  };
+  categoriesList: {
+    name: string;
+    id: string;
+  }[];
+}
 
-type FormValues = z.infer<typeof formSchema>;
-
-export default function EditTransactionForm() {
+export default function EditTransactionForm({
+  onSuccess,
+  transactionsData,
+  categoriesList,
+}: EditTransactionFormProps) {
   const router = useRouter();
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CreateExpenseInput>({
+    resolver: zodResolver(expenseSchema),
     defaultValues: {
-      amount: 125.5,
-      date: "2023-06-15",
-      description: "Grocery Store",
-      category: "food",
+      amount: transactionsData.amount,
+      date: transactionsData.date,
+      description: transactionsData.description,
+      categoryId: transactionsData.category.id,
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: CreateExpenseInput) => {
     console.log("Updated Transaction:", data);
-    router.push("#transactions");
+    await editTransaction(transactionsData.id, data);
+    onSuccess(false);
+    router.push("transactions");
   };
 
   return (
-    <div id="edit-transaction" className="tab-content max-w-2xl mx-auto">
-      <Card>
-        <CardHeader className="flex justify-between items-center border-b p-4">
-          <CardTitle className="text-xl">Edit Transaction</CardTitle>
-        </CardHeader>
-        <CardContent className="p-6">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              {/* Amount */}
-              <FormField
-                control={form.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Amount</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                          $
-                        </span>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          className="pl-7"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    className="pl-7"
+                    {...field}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-              {/* Date */}
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Date</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-              {/* Description */}
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input placeholder="What was this for?" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input placeholder="What was this for?" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-              {/* Category */}
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="food">Food & Dining</SelectItem>
-                          <SelectItem value="transport">
-                            Transportation
-                          </SelectItem>
-                          <SelectItem value="utilities">Utilities</SelectItem>
-                          <SelectItem value="entertainment">
-                            Entertainment
-                          </SelectItem>
-                          <SelectItem value="shopping">Shopping</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <FormField
+          control={form.control}
+          name="categoryId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categoriesList.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-              <div className="flex justify-end gap-2 pt-4">
-                <Link href="/transactions">
-                  <Button type="button" variant="outline">
-                    Cancel
-                  </Button>
-                </Link>
-                <Button type="submit">Save Changes</Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+        <div className="flex justify-end gap-2 pt-4">
+          <Link href="/transactions">
+            <Button type="button" variant="outline">
+              Cancel
+            </Button>
+          </Link>
+          <Button type="submit">Save Changes</Button>
+        </div>
+      </form>
+    </Form>
   );
 }

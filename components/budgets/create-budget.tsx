@@ -23,7 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { budgetSchema, CreateBudgetInput } from "@/lib/validationSchemas";
-import { createBudget } from "@/app/actions/create-budget";
+import { createBudget } from "@/app/actions/budget/create-budget";
 
 interface CreateBudgetProps {
   categories: {

@@ -23,7 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CreateExpenseInput, expenseSchema } from "@/lib/validationSchemas";
-import { createExpense } from "@/app/actions/create-expense";
+import { createTransaction } from "@/app/actions/transaction/create-transaction";
 
 interface AddTransactionFormParams {
   categoriesList: {
@@ -49,7 +49,7 @@ export default function AddTransactionForm({
 
   const onSubmit = async (data: CreateExpenseInput) => {
     console.log("Transaction submitted:", data);
-    await createExpense(data);
+    await createTransaction(data);
     router.push("/transactions");
   };
 

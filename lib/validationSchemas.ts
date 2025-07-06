@@ -17,6 +17,11 @@ export const budgetSchema = z.object({
   amount: z.coerce.number().min(0.01, "Amount must be at least $0.01"),
 });
 
+export const editBudgetSchema = z.object({
+  amount: z.coerce.number().min(0.01, "Amount must be at least $0.01"),
+});
+
 export type CreateExpenseInput = z.infer<typeof expenseSchema>;
 export type CreateCategoryInput = z.infer<typeof categorySchema>;
 export type CreateBudgetInput = z.infer<typeof budgetSchema>;
+export type EditBudgetInput = z.infer<typeof editBudgetSchema>;

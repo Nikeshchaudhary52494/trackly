@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,92 +12,97 @@ import {
 } from "@/components/ui/form";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { SetStateAction } from "react";
+import { editBudget } from "@/app/actions/budget/edit-budget";
+import { EditBudgetInput, editBudgetSchema } from "@/lib/validationSchemas";
 
-const formSchema = z.object({
-  amount: z.coerce.number().min(0.01, "Amount must be at least $0.01"),
-});
+interface EditBudgetFormProps {
+  onSuccess: (value: SetStateAction<boolean>) => void;
+  budgetData: {
+    id: string;
+    amount: number;
+    spent: number;
+    category: {
+      name: string;
+      id: string;
+      color: string;
+    };
+  };
+}
 
-type FormValues = z.infer<typeof formSchema>;
-
-export default function EditBudgetForm() {
+export default function EditBudgetForm({
+  onSuccess,
+  budgetData,
+}: EditBudgetFormProps) {
   const router = useRouter();
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<EditBudgetInput>({
+    resolver: zodResolver(editBudgetSchema),
     defaultValues: {
-      amount: 600.0,
+      amount: budgetData.amount,
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: EditBudgetInput) => {
     console.log("Updated Budget:", {
       category: "Food & Dining",
       ...data,
     });
-    router.push("#budgets");
+    await editBudget(budgetData.id, data);
+    onSuccess(false);
+    router.push("budgets");
   };
 
   return (
-    <div id="edit-budget" className="tab-content max-w-2xl mx-auto">
-      <Card>
-        <CardHeader className="flex justify-between items-center border-b p-4">
-          <CardTitle className="text-xl">Edit Budget</CardTitle>
-        </CardHeader>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Read-only Category */}
+        <FormItem>
+          <FormLabel>Category</FormLabel>
+          <Input
+            value={budgetData.category.name}
+            readOnly
+            className="bg-gray-100 cursor-not-allowed"
+          />
+        </FormItem>
 
-        <CardContent className="p-6">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              {/* Read-only Category */}
-              <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Input
-                  value="Food & Dining"
-                  readOnly
-                  className="bg-gray-100 cursor-not-allowed"
-                />
-              </FormItem>
+        <FormField
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    className="pl-7"
+                    {...field}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-              <FormField
-                control={form.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Amount</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                          $
-                        </span>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          className="pl-7"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex justify-end gap-2 pt-4">
-                <Link href="/budgets">
-                  <Button variant="outline" type="button">
-                    Cancel
-                  </Button>
-                </Link>
-                <Button type="submit">Save Changes</Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+        <div className="flex justify-end gap-2 pt-4">
+          <Link href="/budgets">
+            <Button variant="outline" type="button">
+              Cancel
+            </Button>
+          </Link>
+          <Button type="submit">Save Changes</Button>
+        </div>
+      </form>
+    </Form>
   );
 }

@@ -22,7 +22,7 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { categorySchema, CreateCategoryInput } from "@/lib/validationSchemas";
-import createCategory from "@/app/actions/create-category";
+import createCategory from "@/app/actions/category/create-category";
 
 export default function AddCategoryForm() {
   const form = useForm<CreateCategoryInput>({

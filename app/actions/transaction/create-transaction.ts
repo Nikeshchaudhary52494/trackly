@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { getOrCreateTestUser } from "@/lib/getTestUser";
 import { CreateExpenseInput, expenseSchema } from "@/lib/validationSchemas";
 
-export async function createExpense(formData: CreateExpenseInput) {
+export async function createTransaction(formData: CreateExpenseInput) {
   const parsed = expenseSchema.safeParse(formData);
 
   if (!parsed.success) {
