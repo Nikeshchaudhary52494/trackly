@@ -11,27 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { colorClassMap } from "@/lib/types";
+import { Category, colorClassMap } from "@/lib/types";
 import Link from "next/link";
 import { deleteCategory } from "@/app/actions/category/delete-category";
 import { useRouter } from "next/navigation";
 import { editCategory } from "@/app/actions/category/edit-category";
 
-type Category = {
-  name: string;
-  id: string;
-  color: string;
-};
-
 interface CategoryListProps {
-  initialCategories: {
-    color: string;
-    name: string;
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    userId: string;
-  }[];
+  initialCategories: Category[];
 }
 
 export default function CategoryList({ initialCategories }: CategoryListProps) {

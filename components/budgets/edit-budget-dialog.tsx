@@ -10,18 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import EditBudgetForm from "./edit-budget";
+import { BudgetData } from "@/lib/types";
 
 interface EditBudgetDialogProps {
-  budgetData: {
-    id: string;
-    amount: number;
-    spent: number;
-    category: {
-      name: string;
-      id: string;
-      color: string;
-    };
-  };
+  budgetData: BudgetData;
 }
 
 export default function EditBudgetDialog({

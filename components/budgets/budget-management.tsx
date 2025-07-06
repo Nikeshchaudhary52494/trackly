@@ -10,18 +10,10 @@ import {
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import EditBudgetDialog from "./edit-budget-dialog";
+import { BudgetData } from "@/lib/types";
 
 interface BudgetManagementProps {
-  budgetsData: {
-    id: string;
-    amount: number;
-    spent: number;
-    category: {
-      name: string;
-      id: string;
-      color: string;
-    };
-  }[];
+  budgetsData: BudgetData[];
 }
 
 export default function BudgetManagement({

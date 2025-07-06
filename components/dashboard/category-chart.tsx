@@ -2,26 +2,14 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ColorKey, COLORS } from "@/lib/data";
+import { Expense } from "@/lib/types";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-
-interface Expense {
-  id: string;
-  date: string;
-  amount: number;
-  description: string;
-  category: {
-    id: string;
-    name: string;
-    color: string;
-  };
-}
 
 interface CategoryChartProps {
   data: Expense[];
 }
 
 export default function CategoryChart({ data }: CategoryChartProps) {
-  // Group by category and calculate total per category
   const totalsMap = new Map<
     string,
     { name: string; value: number; color: string }

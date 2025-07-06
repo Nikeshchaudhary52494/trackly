@@ -18,19 +18,11 @@ import Link from "next/link";
 import { SetStateAction } from "react";
 import { editBudget } from "@/app/actions/budget/edit-budget";
 import { EditBudgetInput, editBudgetSchema } from "@/lib/validationSchemas";
+import { BudgetData } from "@/lib/types";
 
 interface EditBudgetFormProps {
   onSuccess: (value: SetStateAction<boolean>) => void;
-  budgetData: {
-    id: string;
-    amount: number;
-    spent: number;
-    category: {
-      name: string;
-      id: string;
-      color: string;
-    };
-  };
+  budgetData: BudgetData;
 }
 
 export default function EditBudgetForm({
