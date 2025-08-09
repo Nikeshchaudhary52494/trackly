@@ -139,3 +139,16 @@ export const navOptions = {
     },
   ],
 };
+
+export const tracklyMessages = [
+  "Track every rupee, grow your wealth.",
+  "Small expenses matter — keep them in check.",
+  "Your money tells a story, make it a good one.",
+  "Spend wisely, save steadily.",
+  "Every expense tracked is a step closer to your goal.",
+  "Budgeting is the first step to financial freedom.",
+  "Know where your money goes, control where it flows.",
+  "Financial clarity starts with tracking.",
+  "Little savings today, big dreams tomorrow.",
+  "Track it. Plan it. Achieve it.",
+];
